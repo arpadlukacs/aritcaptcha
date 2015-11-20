@@ -25,7 +25,7 @@ module Aritcaptcha
          options[:operations].each do |op|
             non_default_operations[op] = default_operations[op]
          end
-	       operator = non_default_operations.to_a[rand(non_default_operations.size)][1]
+         operator = non_default_operations.to_a[rand(non_default_operations.size)][1]
       end
 
       equation, result = Aritcaptcha::Calculation.generate_calculation 50, 50, operator
@@ -39,12 +39,14 @@ module Aritcaptcha
 
       html = ""
       if options[:format] == "image"
-      	 session[:image] = equation_key
+         session[:image] = equation_key
          img = generate_image equation_key, equation
 
          html << "<img src=\"/images/#{img}\" style='vertical-align:top;' /> <input type=\"text\" name=\"equation\" size=\"3\" style='vertical-align:top;' #{options_html unless options_html.nil?} />"
+      elsif options[:format] == 'equation'
+        html << "#{equation} = "
       else
-      	html << "#{equation} = <input type=\"text\" name=\"equation\" style='vertical-align:top;' size=\"3\" #{options_html unless options_html.nil?} /></div>"
+        html << "#{equation} = <input type=\"text\" name=\"equation\" style='vertical-align:top;' size=\"3\" #{options_html unless options_html.nil?} />"
       end
 
       html << "<input type=\"hidden\" name=\"equation_key\" value=\"#{equation_key}\" /> \n"
@@ -58,7 +60,7 @@ module Aritcaptcha
          image = Magick::Image.new(85, 32)
          image.format = "PNG"
          title = Magick::Draw.new
- 
+
          title.annotate(image, 5, 5, 12, 7, equation + " =") do
            self.fill        = "#333"
            self.font        = Rails.root + "/fonts/Clarenton LT Bold.ttf"
@@ -68,7 +70,7 @@ module Aritcaptcha
            self.pointsize   = 15
          end
          image.write(full_path)
-      end      
+      end
        relative_name
     end
   end
