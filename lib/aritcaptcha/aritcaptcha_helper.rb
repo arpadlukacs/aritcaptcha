@@ -43,8 +43,8 @@ module Aritcaptcha
          img = generate_image equation_key, equation
 
          html << "<img src=\"/images/#{img}\" style='vertical-align:top;' /> <input type=\"text\" name=\"equation\" size=\"3\" style='vertical-align:top;' #{options_html unless options_html.nil?} />"
-      elsif options[:format] == 'equation'
-        html << "#{equation} = "
+      elsif options[:format] == 'hash'
+        return { equation: equation, equation_key: equation_key }
       else
         html << "#{equation} = <input type=\"text\" name=\"equation\" style='vertical-align:top;' size=\"3\" #{options_html unless options_html.nil?} />"
       end
